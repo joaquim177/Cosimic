@@ -25,19 +25,50 @@ class Menu:
         
 
     def run(self):
+        self.menu_option = 0
+
+        self.options = (['Play', (255,255,255), 150], ['Score', (255,255,255), 180], ['Quit', (255,255,255), 210] )
         pygame.mixer.music.load('./assets/fase1.mp3')
         pygame.mixer.music.play(-1)
-
+        pygame.mixer.music.set_volume(0.05)
         while True:
             self.windom.blit(source=self.surf, dest=self.rect)
             self.menu_text(text_size=70, text='Cosmic', text_color=(255, 128, 0), text_center_pos=(WIN_WIDTH/2, 40) )
-            self.menu_text(text_size=30, text='Play', text_color=(255,255,255), text_center_pos=(WIN_WIDTH/2, 150))
-            self.menu_text(text_size=30, text='Score', text_color=(255,255,255), text_center_pos=(WIN_WIDTH/2, 180))
-            self.menu_text(text_size=30, text='Quit', text_color=(255,255,255), text_center_pos=(WIN_WIDTH/2, 210))
+
+            for i, opt in enumerate(self.options):
+                color = (255,222,33) if i == self.menu_option else opt[1]
+                self.menu_text(
+                    text_size=30,
+                    text=opt[0],
+                    text_color=color,
+                    text_center_pos=(WIN_WIDTH/2, opt[2])
+                )
+
             pygame.display.flip()
+
+
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     quit()
-     
+                if event.type == pygame.KEYDOWN:
+                    if(event.key == pygame.K_DOWN):
+                        if((len(self.options) - 2) < self.menu_option):
+                            self.menu_option = 0
+                        else:
+                            self.menu_option +=1
+
+                    elif(event.key == pygame.K_UP):
+                        if(self.menu_option < 1):
+                            self.menu_option = 2
+                        else:
+                            self.menu_option -=1
+                    
+                    elif(event.key == pygame.K_RETURN):
+                        res = self.options[self.menu_option][0]
+                        return res
+                        
+                    else:
+                        print("botao nao reconhecido")
+                
