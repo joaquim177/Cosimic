@@ -1,7 +1,9 @@
 
-
-
+import random
 from code.Background import Background
+from code.Enimy import Enimy
+from code.Player import Player
+from code.const import WIN_HEIGHT
 
 
 class EntityFactory():
@@ -9,7 +11,12 @@ class EntityFactory():
    def  getEntity(entity_name:str, position= (0,0)):
         match entity_name:
             case 'level1':
-               list_bg = []
-               for i in range(2):
-                   list_bg.append(Background(f'level1bg{i}', position=(0,0)))
+               list_bg = [
+               Background(f'level1bg{i}', position=(20, 180) if i == 1 else (0, 0))
+               for i in range(2)
+               ]
                return list_bg
+            case 'player':
+                return Player('player', (50,50))
+            case 'cometa':
+                return Enimy('cometa', (0, random.randint(0,50)))

@@ -1,5 +1,6 @@
 import pygame
 from code.Entity import Entity
+from code.const import WIN_WIDTH
 
 class Background(Entity):
     def __init__(self, name:str, position:tuple):
@@ -7,4 +8,4 @@ class Background(Entity):
         pass
 
     def move(self):
-        pass
+       pass
