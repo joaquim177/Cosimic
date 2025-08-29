@@ -3,6 +3,8 @@ import pygame
 from code.Entity import Entity
 from code.EntityFactory import EntityFactory
 import time
+
+from code.EntityMediator import EntityMediator
 class Level:
     def __init__(self, windom, name):
         self.windom = windom
@@ -12,7 +14,7 @@ class Level:
         self.entity_list.extend(EntityFactory.getEntity('level1'))
         self.entity_list.append(EntityFactory.getEntity('player'))
         self.start_time = pygame.time.get_ticks()
-        pygame.time.set_timer(self.event_enemy, 4000)
+        pygame.time.set_timer(self.event_enemy, 1000)
         pass
 
     def cronometro(self):
@@ -32,12 +34,19 @@ class Level:
             for ent in self.entity_list:
                 if hasattr(ent, "move"):
                     ent.move()
+                if hasattr(ent, 'shoot'):
+                    shot = ent.shoot()
+                    if shot:
+                        self.entity_list.append(shot)
+                if ent.__class__.__name__ == "Cometa": 
+                    print(ent.rect.left)
                 self.windom.blit(ent.surf, ent.rect)
             
             self.level_text(14, f'Proteja o planeta terra!! - Timer: {timer}', (255,255,255), (200,10) )    
             self.level_text(14, f'Fps: {clock.get_fps() :.0f}', (255,255,255), (30, 320) )    
             pygame.display.flip()
-
+            EntityMediator.verify_collision(self.entity_list)
+            EntityMediator.verify_health(self.entity_list)
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()

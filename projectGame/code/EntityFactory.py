@@ -12,11 +12,11 @@ class EntityFactory():
         match entity_name:
             case 'level1':
                list_bg = [
-               Background(f'level1bg{i}', position=(20, 180) if i == 1 else (0, 0))
+               Background(f'level1bg{i}', position=(20, 100) if i == 1 else (0, 0))
                for i in range(2)
                ]
                return list_bg
             case 'player':
                 return Player('player', (50,50))
             case 'cometa':
-                return Enimy('cometa', (0, random.randint(0,50)))
+                return Enimy('cometa', (720, random.randint(60,200)))
