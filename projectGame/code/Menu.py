@@ -20,7 +20,7 @@ class Menu:
     def run(self):
         self.menu_option = 0
 
-        self.options = (['Play', (255,255,255), 150], ['Score', (255,255,255), 180], ['Quit', (255,255,255), 210] )
+        self.options = (['Play', (255,255,255), 150],  ['Quit', (255,255,255), 180] )
         pygame.mixer.music.load('./assets/menu.mp3')
         pygame.mixer.music.play(-1)
         pygame.mixer.music.set_volume(0.05)

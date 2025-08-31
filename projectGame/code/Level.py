@@ -9,6 +9,7 @@ class Level:
     def __init__(self, windom, name):
         self.windom = windom
         self.name = name 
+        self.lives = 3
         self.event_enemy = pygame.USEREVENT +1
         self.entity_list: list[Entity] = []
         self.entity_list.extend(EntityFactory.getEntity('level1'))
@@ -23,11 +24,15 @@ class Level:
             self.time += 1
 
     def run(self):
+
         pygame.mixer_music.load('./assets/'+self.name+'.mp3')
         pygame.mixer_music.play(-1)
         clock = pygame.time.Clock()
         while True:
-            clock.tick(60)
+            if(self.lives <= 0):
+                print("game over")
+                return
+            clock.tick(60)  
             timer = (pygame.time.get_ticks() - self.start_time) / 1000  
 
 
@@ -43,9 +48,10 @@ class Level:
                 self.windom.blit(ent.surf, ent.rect)
             
             self.level_text(14, f'Proteja o planeta terra!! - Timer: {timer}', (255,255,255), (200,10) )    
+            self.level_text(14, f'Life: {self.lives}', (255,255,255), (200,30) )    
             self.level_text(14, f'Fps: {clock.get_fps() :.0f}', (255,255,255), (30, 320) )    
             pygame.display.flip()
-            EntityMediator.verify_collision(self.entity_list)
+            EntityMediator.verify_collision(self.entity_list, self)
             EntityMediator.verify_health(self.entity_list)
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:

@@ -23,17 +23,25 @@ class EntityMediator:
                return False
     @staticmethod      
     def verify_health(entity_list: list[Entity]):
-        for ent in entity_list:
-            if isinstance(ent, Enimy) and ent.health <= 0:
-                 entity_list.remove(ent)
-            
+        for ent in entity_list[:]:                    # usa [:] para iterar em cópia
+           if isinstance(ent, Enimy) and ent.health <= 0: 
+               entity_list.remove(ent)
 
     
 
     @staticmethod
-    def verify_collision(entity_list:list[Entity]):
-        for i in range(len(entity_list)):
-            test_entity = entity_list[i]
-            test = EntityMediator.__verify_collision_windom(test_entity)
-            if test:
-                print('- 1 life')
+    def verify_collision(entity_list: list[Entity], level=None):
+        for ent in entity_list[:]:      
+            if isinstance(ent, Enimy) and ent.rect.left <= 0:
+                print("ola")
+                ent.health = 0
+                if level:
+                    level.lives -= 1
+                    print(f"💔 perdeu uma vida, vidas restantes: {level.lives}")
+                            
+            if isinstance(ent, PlayerShot):
+                for other in entity_list[:]:
+                    if isinstance(other, Enimy) and ent.rect.colliderect(other.rect):
+                        other.health = 0              # mata o inimigo
+                        ent.health = 0                # mata o tiro
+                        print("💥 inimigo atingido!")
